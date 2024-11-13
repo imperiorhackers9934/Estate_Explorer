@@ -9,13 +9,13 @@ app.get('/',async (req, res) => {
 })
 app.post('/adduser',async (req,res)=>{
 
-    // const AddUser = new User({
-    //     name:req.body.name,
-    //     mailid:req.body.email,
-    //     mobileno:req.body.mobile,
-    //     password:req.body.password
-    //   })
-    //   await AddUser.save()
+    const AddUser = new User({
+        name:req.body.name,
+        mailid:req.body.email,
+        mobileno:req.body.mobile,
+        password:req.body.password
+      })
+      await AddUser.save()
     console.log(req)
       res.send("Data Saved Success")
 })
