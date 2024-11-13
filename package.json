@@ -1,0 +1,19 @@
+{
+  "name": "estate_explorer",
+  "version": "1.0.0",
+  "description": "This is a group project for the institution Pranveer Singh Institute of Technology.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Estate_Explorer"
+  },
+  "author": "Tanishq Mishra,Abhinay Patel,Siddharth Shukla,Sunakshi Pal and Sujal Gupta",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0",
+    "mongoose": "^8.6.4"
+  }
+}
