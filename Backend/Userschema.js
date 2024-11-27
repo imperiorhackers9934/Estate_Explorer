@@ -21,6 +21,7 @@ const userSchema = new Schema({
   Date:{
     type:String,
     required:true
+    default:
   }
 });
 
