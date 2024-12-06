@@ -1142,3 +1142,6 @@ body {
   .about .section-text { max-width: unset; }
 
 }
+#sell{
+  margin-top: 15vh;
+}

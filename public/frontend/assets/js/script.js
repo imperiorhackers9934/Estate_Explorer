@@ -99,6 +99,7 @@ $(document).ready(function() {
     console.log(data)
     // Iterate through the properties and create HTML elements for each one
     data.forEach(function(property) {
+      let stars = ''; for (let i = 0; i < parseInt(property.rating); i++) { stars += '<ion-icon name="star"></ion-icon>'; }
       const propertyItem = `
           <li>
               <div class="property-card">
@@ -160,11 +161,7 @@ $(document).ready(function() {
                       <span class="meta-text">
 
                         <div class="rating-wrapper">
-                          <ion-icon name="star"></ion-icon>
-                          <ion-icon name="star"></ion-icon>
-                          <ion-icon name="star"></ion-icon>
-                          <ion-icon name="star"></ion-icon>
-                          <ion-icon name="star"></ion-icon>
+                          ${stars}
                         </div>
 
                         <span>${property.rating}</span>
