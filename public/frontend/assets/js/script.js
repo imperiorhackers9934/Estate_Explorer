@@ -7,15 +7,18 @@
  */
 
 const addEventOnElement = function (element, type, listener) {
-  if (element.length > 1) {
+  // Check if element is a collection (NodeList, HTMLCollection, or Array)
+  if (NodeList.prototype.isPrototypeOf(element) || HTMLCollection.prototype.isPrototypeOf(element) || Array.isArray(element)) {
     for (let i = 0; i < element.length; i++) {
       element[i].addEventListener(type, listener);
     }
-  } else {
+  } else if (element && typeof element.addEventListener === 'function') {
+    // Handle single DOM element
     element.addEventListener(type, listener);
+  } else {
+    console.error('Invalid element:', element);
   }
-}
-
+};
 
 
 /**

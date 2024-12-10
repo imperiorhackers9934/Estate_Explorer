@@ -10,6 +10,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  address: {
+    type: String,
+    required: true,
+  },
   mobileno: {
     type: Number,
     required: true,

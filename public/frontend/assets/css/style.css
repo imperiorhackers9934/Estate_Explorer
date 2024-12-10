@@ -1,14 +1,3 @@
-/*-----------------------------------*\
-  #style.css
-\*-----------------------------------*/
-
-/**
- * copyright 2022 codewithsadee
- */
-
-
-
-
 
 /*-----------------------------------*\
   #CUSTOM PROPERTY
@@ -318,6 +307,14 @@ body {
 
 .hero-bg {
   background-image: url("../images/hero-bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius-16);
+  overflow: hidden;
+}
+.hero-bg2 {
+  background-image: url("../images/property-2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;

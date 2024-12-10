@@ -5,112 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Buy Property - Estate Explorer</title>
+    <title>About Us - Estate Explorer</title>
     <link rel="stylesheet" href="./assets/css/style.css">
-    <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .about-container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            justify-content: space-between;
-        }
-
-        .about-section {
-            flex: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .about-section h2 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .about-section p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #666;
-        }
-
-        .team {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-between;
-        }
-
-        .team-member {
-            flex: 1 0 30%;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-        }
-
-        .team-member img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-
-        .team-member h3 {
-            font-size: 20px;
-            color: #333;
-        }
-
-        .team-member p {
-            font-size: 14px;
-            color: #777;
-        }
-
-        .testimonials {
-            background-color: #f9f9f9;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-top: 40px;
-        }
-
-        .testimonials h2 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-
-        .testimonial {
-            margin-bottom: 20px;
-            font-style: italic;
-            color: #555;
-        }
-
-        .testimonial span {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    <link rel="stylesheet" href="./assets/css/register_style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
       rel="stylesheet">
+      <link rel="stylesheet" href="./assets/css/login-style.css">
 </head>
 
 <body>
@@ -149,8 +51,6 @@
             </ul>
           </nav>
     
-          <a href="Register.html" class="btn btn-secondary">Signup</a>
-          <a href="Login.html" class="btn btn-secondary">Signin</a>
     
           <button class="nav-toggle-btn" aria-label="Toggle menu" data-nav-toggler>
             <ion-icon name="menu-outline" aria-hidden="true" class="menu-icon"></ion-icon>
@@ -158,115 +58,32 @@
           </button>
     
         </div>
+        
       </header>
       <!-- Main Search Section -->
-      <section class="section hero" aria-label="hero">
-        <div class="container">
+      <div class="lo-container">
+        <div class="lo-form-container">
+            <h2>Login to Estate Explorer</h2>
+            <form action="" method="POST">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
 
-          <div class="hero-bg2">
-            <div class="hero-content">
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
 
-              <h1 class="h1 hero-title">
-                Search your desired <span class="span">Property</span> Today
-              </h1>
+                <button type="submit" class="btn">Login</button>
 
-              <p class="hero-text">
-                A great plateform to buy, sell and rent your properties without any agent or commisions.
-              </p>
-
-            </div>
-          </div>
-
-          <div class="hero-form-wrapper">
-
-            <form action="" class="hero-form" id="mysearch">
-
-              <div class="input-wrapper">
-
-                <label for="search" class="input-label">Search : *</label>
-
-                <input type="search" name="search" id="search" placeholder="Search by Location" required
-                  class="input-field">
-
-                <ion-icon name="search-outline"></ion-icon>
-
-              </div>
-
-              <div class="input-wrapper">
-                <label for="category" class="input-label">Select Categories:</label>
-
-                <select name="category" id="category" class="dropdown-list">
-
-                  <option value="house">House</option>
-                  <option value="apartment">Apartment</option>
-                  <option value="offices">Offices</option>
-                  <option value="townhome">Townhome</option>
-
-                </select>
-              </div>
-
-              <div class="input-wrapper">
-                <label for="min-price" class="input-label">Min Price :</label>
-
-                <select name="min-price" id="min-price" class="dropdown-list">
-
-                  <option value="10000">Min Price</option>
-                  <option value="500000">500</option>
-                  <option value="1000000">1000</option>
-                  <option value="2000000">2000</option>
-                  <option value="3000000">3000</option>
-                  <option value="4000000">4000</option>
-                  <option value="5000000">5000</option>
-                  <option value="6000000">6000</option>
-
-                </select>
-              </div>
-
-              <div class="input-wrapper">
-                <label for="max-price" class="input-label">Max Price :</label>
-
-                <select name="max-price" id="max-price" class="dropdown-list">
-
-                  <option value="90000">Max Price</option>
-                  <option value="500000">500</option>
-                  <option value="1000000">1000</option>
-                  <option value="2000000">2000</option>
-                  <option value="3000000">3000</option>
-                  <option value="4000000">4000</option>
-                  <option value="5000000">5000</option>
-                  <option value="9000000">6000</option>
-
-                </select>
-              </div>
-
-              <button type="submit" class="btn btn-primary">Search now</button>
-
+                <div class="signup-link">
+                    <p>Don't have an account? <a href="Register.html">Sign up here</a></p>
+                </div>
             </form>
-          </div>
-
         </div>
-      </section>
-      <!-- Property Listing Section -->
-      <section class="section property" aria-label="property">
-        <div class="container">
-
-          <h2 class="h2 section-title">Featured Properties</h2>
-
-          <p class="section-text">
-            A great plateform to buy, sell and rent your properties without any agent or commisions.
-          </p>
-
-          <ul class="property-list">
-
-            
-
-            
-
-          </ul>
-
-        </div>
-      </section>
-
+    </div>
+      
     <!-- Footer -->
     <footer class="footer">
 
@@ -423,7 +240,6 @@
         </div>
     
       </footer>
-    <script src="./assets/js/buy-search.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>

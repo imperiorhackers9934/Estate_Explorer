@@ -4,6 +4,7 @@ const port = 3000;
 const mongoose = require('mongoose');
 const User = require('./Backend/Schemas/Userschema');
 const path=require("path")
+const bodyParser = require('body-parser');
 const staticpath=path.join(__dirname,"./public/frontend/")
 app.use(express.static(staticpath))
 const Property = require("./Backend/Schemas/Proschema")
@@ -28,12 +29,13 @@ app.post('/adduser', async (req, res) => {
     name: req.body.name,
     mailid: req.body.email,
     mobileno: req.body.mobile,
+    address: req.body.address,
     password: req.body.password
   });
 
   try {
     await AddUser.save();
-    res.status(201).send("Data Saved Success");
+    res.status(201).json({msg:"Data Saved Success"});
   } catch (error) {
     res.status(500).send(error);
   }
@@ -87,10 +89,25 @@ app.delete('/deleteuser/:id', async (req, res) => {
 // Add property
 app.post('/properties', async (req, res) => {
   try {
-    const property = new Property(req.body);
+    const propertyData = {
+        title: req.body.title,
+        type: req.body['property-type'],
+        location: req.body.location,
+        address: req.body.address,
+        price: req.body.price,
+        rating: 0, // Assuming default rating, can be updated based on your logic area: 
+        area: req.body.area,
+        bedrooms: req.body.bedrooms,
+        baths: req.body.baths,
+        description: req.body.description,
+        features: req.body.features.split(',').map(feature => feature.trim()),
+        images: req.files.map(file => file.path),
+        userId: req.body.userId // Assuming userId is sent in the request body 
+    };
+    const property = new Property(propertyData);
     await property.save();
     res.status(201).send(property);
-  } catch (err) {
+}catch (err) {
     res.status(400).send(err);
   }
 });
@@ -138,6 +155,29 @@ app.delete('/properties/:id', async (req, res) => {
   }
 });
 
+//Search Property Buy.html Feature
+app.get('/search-properties', async (req, res) => {
+  try {
+      const {
+          search,
+          category,
+          minPrice,
+          maxPrice
+      } = req.query;
+      const filter = {
+          location: new RegExp(search, 'i'),
+          type: category,
+          price: {
+              $gte: Number(minPrice),
+              $lte: Number(maxPrice)
+          }
+      };
+      const properties = await Property.find(filter);
+      res.json(properties);
+  } catch (err) {
+      res.status(500).send(err);
+  }
+});
 
 // Start the server
 app.listen(port, () => {
