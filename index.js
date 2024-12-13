@@ -1,14 +1,19 @@
 const express = require('express');
+const { body, validationResult } = require('express-validator');
 const app = express();
 const port = 3000;
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('./Backend/Schemas/Userschema');
-const path=require("path")
-const bodyParser = require('body-parser');
-const staticpath=path.join(__dirname,"./public/frontend/")
-app.use(express.static(staticpath))
-const Property = require("./Backend/Schemas/Proschema")
+const path = require('path');
+const staticpath = path.join(__dirname, "./public/frontend/");
+app.use(express.static(staticpath));
+const Property = require("./Backend/Schemas/Proschema");
 app.use(express.json()); // Middleware to parse JSON
+
+// JWT Secret Key
+const JWT_SECRET = 'T@ni&hq9936'; // Replace with your actual secret key
 
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
@@ -20,26 +25,72 @@ mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
 
 // Home route
 app.get('/', async (req, res) => {
-  res.send("HEllo")
+  res.send("Hello");
 });
 
 // Add user endpoint
-app.post('/adduser', async (req, res) => {
-  const AddUser = new User({
-    name: req.body.name,
-    mailid: req.body.email,
-    mobileno: req.body.mobile,
-    address: req.body.address,
-    password: req.body.password
-  });
+app.post('/adduser', [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('email').isEmail().withMessage('Invalid email'),
+  body('mobileno').isMobilePhone().withMessage('Invalid mobile number'),
+  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+], async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { name, email, mobileno, address, password } = req.body;
 
   try {
-    await AddUser.save();
-    res.status(201).json({msg:"Data Saved Success"});
+    const userExists = await User.findOne({ mailid: email });
+    if (userExists) {
+      return res.status(400).json({ msg: 'User already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, mailid: email, mobileno, address, password: hashedPassword });
+    await newUser.save();
+
+    const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(201).json({ msg: 'User created successfully', token });
   } catch (error) {
-    res.status(500).send(error);
+    res.status(500).json({ error: 'Failed to add user', details: error.message });
   }
 });
+
+
+// User login endpoint
+app.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ msg: 'Email and password are required' });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ mailid: email }); // Ensure consistent field name
+    if (!user) {
+      return res.status(400).json({ msg: 'User does not exist' });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid credentials' });
+    }
+
+    // Generate JWT
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ msg: 'Login successful', token });
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 // Update user endpoint
 app.put('/updateuser/:id', async (req, res) => {
@@ -50,9 +101,9 @@ app.put('/updateuser/:id', async (req, res) => {
       userId,
       {
         name: req.body.name,
-        mailid: req.body.email,
-        mobileno: req.body.mobile,
-        password: req.body.password
+        email: req.body.email,
+        mobileno: req.body.mobileno,
+        password: await bcrypt.hash(req.body.password, 10)
       },
       { new: true } // Return the updated document
     );
@@ -90,24 +141,24 @@ app.delete('/deleteuser/:id', async (req, res) => {
 app.post('/properties', async (req, res) => {
   try {
     const propertyData = {
-        title: req.body.title,
-        type: req.body['property-type'],
-        location: req.body.location,
-        address: req.body.address,
-        price: req.body.price,
-        rating: 0, // Assuming default rating, can be updated based on your logic area: 
-        area: req.body.area,
-        bedrooms: req.body.bedrooms,
-        baths: req.body.baths,
-        description: req.body.description,
-        features: req.body.features.split(',').map(feature => feature.trim()),
-        images: req.files.map(file => file.path),
-        userId: req.body.userId // Assuming userId is sent in the request body 
+      title: req.body.title,
+      type: req.body['property-type'],
+      location: req.body.location,
+      address: req.body.address,
+      price: req.body.price,
+      rating: 0, // Assuming default rating, can be updated based on your logic
+      area: req.body.area,
+      bedrooms: req.body.bedrooms,
+      baths: req.body.baths,
+      description: req.body.description,
+      features: req.body.features.split(',').map(feature => feature.trim()),
+      images: req.files.map(file => file.path),
+      userId: req.body.userId // Assuming userId is sent in the request body
     };
     const property = new Property(propertyData);
     await property.save();
     res.status(201).send(property);
-}catch (err) {
+  } catch (err) {
     res.status(400).send(err);
   }
 });
@@ -155,27 +206,27 @@ app.delete('/properties/:id', async (req, res) => {
   }
 });
 
-//Search Property Buy.html Feature
+// Search Property Buy.html Feature
 app.get('/search-properties', async (req, res) => {
   try {
-      const {
-          search,
-          category,
-          minPrice,
-          maxPrice
-      } = req.query;
-      const filter = {
-          location: new RegExp(search, 'i'),
-          type: category,
-          price: {
-              $gte: Number(minPrice),
-              $lte: Number(maxPrice)
-          }
-      };
-      const properties = await Property.find(filter);
-      res.json(properties);
+    const {
+      search,
+      category,
+      minPrice,
+      maxPrice
+    } = req.query;
+    const filter = {
+      location: new RegExp(search, 'i'),
+      type: category,
+      price: {
+        $gte: Number(minPrice),
+        $lte: Number(maxPrice)
+      }
+    };
+    const properties = await Property.find(filter);
+    res.json(properties);
   } catch (err) {
-      res.status(500).send(err);
+    res.status(500).send(err);
   }
 });
 

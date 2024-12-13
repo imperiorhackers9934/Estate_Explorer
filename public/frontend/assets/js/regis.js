@@ -15,16 +15,17 @@ document.getElementById('user-form').addEventListener('submit', async function(e
     const userData = {
       "name": formData.get('username'),
       "email": formData.get('email'),
-      "mobile": formData.get('mob'),
+      "mobileno": parseInt(formData.get('mob')), // Correct key: 'mobileno'
       "address": formData.get('address'),
       "password": password
     };
-  
+    
     // Additional validation: Ensure mobile number is numeric
-    if (isNaN(userData.mobile)) {
+    if (isNaN(userData.mobileno)) { // Correct key: 'mobileno'
       alert("Mobile number must be numeric");
       return;
     }
+    
   
     // Additional validation: Ensure email format is correct
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -44,6 +45,7 @@ document.getElementById('user-form').addEventListener('submit', async function(e
   
       if (response.ok) {
         const data = await response.json();
+        localStorage.setItem("auth-token",data.token)
         alert('User added successfully!');
         console.log(data);
         // Optionally, reset the form
