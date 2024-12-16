@@ -1,0 +1,13 @@
+/* Existing CSS code here */
+
+/* Property Detail CSS */
+.property-detail {
+    margin-top: 20px;
+}
+
+.property-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
