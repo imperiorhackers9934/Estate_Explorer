@@ -140,26 +140,43 @@ app.delete('/deleteuser/:id', async (req, res) => {
 // Add property
 app.post('/properties', async (req, res) => {
   try {
+    // Extract the auth-token from req.body.userId
+    const token = req.body.userId;
+
+    // Verify and decode the token
+    const decoded = jwt.verify(token, JWT_SECRET); // This will extract the userId
+
+    // Use the decoded userId in the propertyData
     const propertyData = {
       title: req.body.title,
       type: req.body['property-type'],
       location: req.body.location,
       address: req.body.address,
       price: req.body.price,
-      rating: 0, // Assuming default rating, can be updated based on your logic
+      rating: 0, // Default rating
       area: req.body.area,
       bedrooms: req.body.bedrooms,
       baths: req.body.baths,
       description: req.body.description,
       features: req.body.features.split(',').map(feature => feature.trim()),
-      images: req.files.map(file => file.path),
-      userId: req.body.userId // Assuming userId is sent in the request body
+      images: req.files.map(file => file.path), // Assuming you're using a middleware like multer
+      userId: decoded.userId // Extracted userId from the token
     };
+
+    // Save the property to the database
     const property = new Property(propertyData);
     await property.save();
-    res.status(201).send(property);
+
+    res.status(201).send(property); // Respond with the saved property
   } catch (err) {
-    res.status(400).send(err);
+    // Handle errors appropriately
+    if (err.name === 'JsonWebTokenError') {
+      return res.status(401).send({ error: 'Invalid token' });
+    } else if (err.name === 'TokenExpiredError') {
+      return res.status(401).send({ error: 'Token expired' });
+    } else {
+      return res.status(400).send(err);
+    }
   }
 });
 

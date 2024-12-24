@@ -1,5 +1,5 @@
 // Fetch userId from local storage
-const userId = localStorage.getItem('userId');
+const userId = localStorage.getItem('auth-token');
   
 // Check if userId exists in local storage
 if (!userId) {
@@ -11,10 +11,6 @@ document.getElementById('property-form').addEventListener('submit', async functi
   
     const form = event.target;
     const formData = new FormData(form);
-  
-    // Fetch userId from local storage
-    const userId = localStorage.getItem('userId');
-  
     // Check if userId exists in local storage
     if (userId) {
       formData.append('userId', userId);
