@@ -119,7 +119,7 @@ $(document).ready(function() {
                 <div class="card-content">
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">${property.address}</a>
+                    <a href="./view.html?propid=${property._id}" class="card-title">${property.address}</a>
                   </h3>
 
                   <ul class="card-list">

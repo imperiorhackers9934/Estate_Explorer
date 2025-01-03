@@ -16,7 +16,12 @@
 </head>
 
 <body>
-
+    <script>
+      let gettoken=localStorage.getItem("auth-token");
+  if(gettoken){
+      window.location="dashboard.html"  
+  }
+    </script>
     <!-- Header -->
     <header class="header" data-header>
         <div class="container">

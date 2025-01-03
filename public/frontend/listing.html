@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estate Explorer - Listings</title>
     <link rel="stylesheet" href="./assets/css/listing.css">
 </head>
+
 <body>
+    <script>
+        const user = localStorage.getItem('auth-token')
+        document.addEventListener('DOMContentLoaded', async function () {
+            const propertyList = document.getElementById('property-list');
+
+            // Fetch properties from the API
+            async function fetchProperties(id) {
+                try {
+                    const response = await fetch(`/userproperties/${id}`); // Replace with your actual API endpoint
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch properties');
+                    }
+                    const properties = await response.json();
+                    displayProperties(properties);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while fetching the properties.');
+                }
+            }
+
+            // Display properties
+            function displayProperties(properties) {
+                propertyList.innerHTML = ''; // Clear existing properties
+                properties.forEach(property => {
+                    const propertyItem = document.createElement('div');
+                    propertyItem.classList.add('property-item');
+
+                    propertyItem.innerHTML = `
+                <h2>${property.title}</h2>
+                <p>${property.description}</p>
+                <a href="property-detail.html?id=${property._id}" class="view-btn">View Details</a>
+                <button class="delete-btn" data-id="${property._id}">Delete</button>
+            `;
+
+                    // Add event listener for the delete button
+                    propertyItem.querySelector('.delete-btn').addEventListener('click', function () {
+                        deleteProperty(property._id);
+                    });
+
+                    propertyList.appendChild(propertyItem);
+                });
+            }
+
+            // Delete property
+            async function deleteProperty(id) {
+                try {
+                    const response = await fetch(`/properties/${id}`, {
+                        method: 'DELETE'
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to delete property');
+                    }
+                    alert('Property deleted successfully');
+                    fetchProperties(user); // Refresh the list of properties
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while deleting the property.');
+                }
+            }
+
+            // Fetch properties on page load
+            fetchProperties(user);
+        });
+
+    </script>
     <nav class="navbar">
         <!-- <div class="navbar-container">
             <a href="dashboard.html" class="navbar-brand">Estate Explorer</a>
@@ -41,4 +108,5 @@
         </main>
     </div>
 </body>
+
 </html>

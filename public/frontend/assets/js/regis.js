@@ -50,6 +50,7 @@ document.getElementById('user-form').addEventListener('submit', async function(e
         console.log(data);
         // Optionally, reset the form
         event.target.reset();
+        window.location="dashboard.html"
       } else {
         const errorData = await response.json();
         alert(`Failed to add user: ${errorData.message}`);

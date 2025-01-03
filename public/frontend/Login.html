@@ -16,12 +16,17 @@
 </head>
 
 <body>
-
+<script>
+  let gettoken=localStorage.getItem("auth-token");
+  if(gettoken){
+      window.location="dashboard.html"  
+  }
+</script>
     <!-- Header -->
     <header class="header" data-header>
         <div class="container">
     
-          <a href="#" class="logo">
+          <a href="./index.html" class="logo">
             <ion-icon name="business-outline"></ion-icon> Estate Explorer
           </a>
     
@@ -37,7 +42,7 @@
               </li>
     
               <li>
-                <a href="./sh.html" class="navbar-link" data-nav-link>Sell</a>
+                <a href="./Sell.html" class="navbar-link" data-nav-link>Sell</a>
               </li>
     
               <li>

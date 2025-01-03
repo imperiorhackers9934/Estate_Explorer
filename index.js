@@ -2,6 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const app = express();
 const port = 3000;
+const multer = require('multer');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -15,6 +16,25 @@ app.use(express.json()); // Middleware to parse JSON
 // JWT Secret Key
 const JWT_SECRET = 'T@ni&hq9936'; // Replace with your actual secret key
 
+
+// Setup for Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Directory to save files
+  },
+  filename: (req, file, cb) => {
+    const newFilename = `custom_${req.body.newname}${path.extname(file.originalname)}`;
+    cb(null, newFilename); // Custom file name
+  }
+});
+
+// Multer configuration to handle multiple files and limit to 10
+const upload = multer({
+  storage,
+  limits: { files: 10, fileSize: 10 * 1024 * 1024 }, // Limit 10 files and 10MB per file
+}).array('files'); // Use .array for multiple files
+
+
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
   useNewUrlParser: true,
@@ -24,8 +44,17 @@ mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
   .catch((error) => console.error('Could not connect to MongoDB:', error));
 
 // Home route
-app.get('/', async (req, res) => {
-  res.send("Hello");
+app.get('/getname/:id', async (req, res) => {
+  try {
+    const usr = await User.findById(req.params.id);
+    if (!usr) return res.status(404).send('User invalid');
+    res.json({"name":usr.name,
+      "mobile":usr.mobileno,
+      "mailid":usr.mailid
+    });
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 // Add user endpoint
@@ -146,10 +175,13 @@ app.post('/properties', async (req, res) => {
     // Verify and decode the token
     const decoded = jwt.verify(token, JWT_SECRET); // This will extract the userId
 
-    // Use the decoded userId in the propertyData
+    // Add the newname to req.body
+    req.body.newname = decoded.userId;
+
+    // Create propertyData with user-specific data
     const propertyData = {
       title: req.body.title,
-      type: req.body['property-type'],
+      type: req.body.type,
       location: req.body.location,
       address: req.body.address,
       price: req.body.price,
@@ -158,16 +190,37 @@ app.post('/properties', async (req, res) => {
       bedrooms: req.body.bedrooms,
       baths: req.body.baths,
       description: req.body.description,
-      features: req.body.features.split(',').map(feature => feature.trim()),
-      images: req.files.map(file => file.path), // Assuming you're using a middleware like multer
+      features: req.body.features.split(","),
+      images: [], // This will be populated after file upload
       userId: decoded.userId // Extracted userId from the token
     };
+    console.log(propertyData)
+    // Upload files
+    upload(req, res, async (err) => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_COUNT') {
+          return res.status(400).send('You can upload a maximum of 10 files.');
+        }
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).send('File size is too large (max 10MB per file).');
+        }
+        return res.status(400).send('Error uploading files.');
+      }
 
-    // Save the property to the database
-    const property = new Property(propertyData);
-    await property.save();
+      if (req.files && req.files.length > 0) {
+        // Update the propertyData with uploaded filenames
+        propertyData.images = req.files.map(file => file.filename);
+      } else {
+        return res.status(400).send('No files uploaded.');
+      }
 
-    res.status(201).send(property); // Respond with the saved property
+      // Save the property to the database
+      const property = new Property(propertyData);
+      await property.save();
+
+      res.status(201).send(property); // Respond with the saved property
+    });
+    
   } catch (err) {
     // Handle errors appropriately
     if (err.name === 'JsonWebTokenError') {
@@ -196,6 +249,16 @@ app.get('/properties/:id', async (req, res) => {
     const property = await Property.findById(req.params.id);
     if (!property) return res.status(404).send('Property not found');
     res.send(property);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+//Read Properties of a specific user
+app.get('/userproperties/:id', async (req, res) => {
+  try {
+    const property = await Property.find({"userId":req.params.id});
+    if (!property) return res.status(404).send('Property not found');
+    res.json(property);
   } catch (err) {
     res.status(500).send(err);
   }

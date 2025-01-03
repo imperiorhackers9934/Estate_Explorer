@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem('auth-token', data.token);
   
           // Redirect to a protected page or home page
-          window.location.href = 'HomePage.html';
+          window.location.href = 'dashboard.html';
         } else {
           // Login failed
           alert(data.msg || 'Login failed. Please try again.');

@@ -1,41 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estate Explorer - Property Details</title>
-    <link rel="stylesheet" href="./assets/css/view.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="./assets/css/view.css">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script>
+    let currentIndex = 0;
+
+function showImage(index) {
+  const imagesContainer = document.querySelector('.carousel-images');
+  const totalImages = imagesContainer.children.length;
+  const imageWidth = imagesContainer.children[0].offsetWidth;
+
+  // Wrap around logic
+  if (index < 0) {
+    currentIndex = totalImages - 1;
+  } else if (index >= totalImages) {
+    currentIndex = 0;
+  } else {
+    currentIndex = index;
+  }
+
+  // Move the carousel
+  imagesContainer.style.transform = `translateX(-${currentIndex * imageWidth}px)`;
+}
+
+function prevImage() {
+  showImage(currentIndex - 1);
+}
+
+function nextImage() {
+  showImage(currentIndex + 1);
+}
+
+// Initialize the first image
+showImage(0);
+
+  </script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="dashboard.html" class="navbar-brand">Estate Explorer</a>
-            <ul class="navbar-menu">
-                <li><a href="dashboard.html">Dashboard</a></li>
-                <li><a href="sell.html">Sell</a></li>
-                <li><a href="listings.html">Listings</a></li>
-                <li><a href="contact.html">Contact</a></li>
+    <script src="./assets/js/view.js"></script>
+    <header class="header" data-header>
+        <div class="container">
+    
+          <a href="./index.html" class="logo">
+            <ion-icon name="business-outline"></ion-icon> Estate Explorer
+          </a>
+    
+          <nav class="navbar container" data-navbar>
+            <ul class="navbar-list">
+    
+              <li>
+                <a href="./index.html" class="navbar-link" data-nav-link>Home</a>
+              </li>
+    
+              <li>
+                <a href="./Buy.html" class="navbar-link" data-nav-link>Buy</a>
+              </li>
+    
+              <li>
+                <a href="./Sell.html" class="navbar-link" data-nav-link>Sell</a>
+              </li>
+    
+              <li>
+                <a href="./aboutUs.html" class="navbar-link" data-nav-link>About Us</a>
+              </li>
+    
+              <li>
+                <a href="./Contact.html" class="navbar-link" data-nav-link>Contact</a>
+              </li>
+    
             </ul>
+          </nav>
+    
+          <script>
+            window.onload = function () {
+              let userId = localStorage.getItem('auth-token')
+              if (userId) {
+                document.getElementById("btn1").style.display = "none";
+                document.getElementById("btn3").style.display = "none";
+              } else {
+                document.getElementById("btn2").style.display = "none";
+              }
+            }
+          </script>
+          <a href="Register.html" class="btn btn-secondary" id="btn1">Signup</a>
+          <a href="dashboard.html" class="btn btn-secondary" id="btn2">Dashboard</a>
+          <a href="Login.html" class="btn btn-secondary" id="btn3">Signin</a>
+    
+          <button class="nav-toggle-btn" aria-label="Toggle menu" data-nav-toggler>
+            <ion-icon name="menu-outline" aria-hidden="true" class="menu-icon"></ion-icon>
+            <ion-icon name="close-outline" aria-hidden="true" class="close-icon"></ion-icon>
+          </button>
+    
         </div>
-    </nav>
+      </header>
+  <section class="feature-section">
     <div class="container">
-        <header>
-            <h1>Property Details</h1>
-        </header>
-        <main>
-            <div class="property-detail">
-                <img src="property-photo.jpg" alt="Property Photo" class="property-photo">
-                <h2>Property Name</h2>
-                <p>Description of the property goes here...</p>
-                <p><strong>Price:</strong> $500,000</p>
-                <p><strong>Location:</strong> City, Country</p>
-                <p><strong>Documents:</strong></p>
-                <ul>
-                    <li>Document 1</li>
-                    <li>Document 2</li>
-                </ul>
+        <div class="image-carousel">
+            <div class="carousel-images">
+              <img src="https://dummyimage.com/460x500" alt="Image 1">
+              <img src="https://dummyimage.com/460x500/111/fff" alt="Image 2">
+              <img src="https://dummyimage.com/460x500/222/fff" alt="Image 3">
             </div>
-        </main>
+            <button class="carousel-control prev" onclick="prevImage()">&#10094;</button>
+            <button class="carousel-control next" onclick="nextImage()">&#10095;</button>
+          </div>
+          
+      <div class="content-container">
+        <div class="feature-item">
+          <div class="icon-circle">
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon" viewBox="0 0 24 24">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <div class="feature-text">
+            <h2 id="usr">User</h2>
+            <p>This Property is listed by the user.</p>
+            <a href="#" class="learn-more" id="lets-mail">E Mail
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="arrow-icon" viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <h1 id="prop-title">Property title</h1>
+        <h2>Property Description</h2><br>
+        <div id="prop-desc">
+          <h3>Area : <span id="area"></span> sqft</h3>
+          <h3>Bedrooms : <span id="bedroom"></span></h3>
+          <h3>Baths : <span id="baths"></span></h3>
+          <h3>Pricing : <span id="cost"></span></h3>
+      </div>
+      <button id="buy-prop">Aquire Now</button>
+      <section class="map-container">
+        <h2>Property Location</h2>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d243647.2904556158!2d-74.005941!3d40.712776!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a221e64f237%3A0xf80fcbcb742d595a!2sNew%20York%20City%2C%20NY!5e0!3m2!1sen!2sus!4v1634762831049!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+    </section>
     </div>
+  </section>
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="container">
+
+        <div class="footer-brand">
+
+          <a href="#" class="logo">
+            <ion-icon name="business-outline"></ion-icon> Estate Explorer
+          </a>
+
+          <p class="footer-text">
+            A great plateform to buy, sell and rent your properties without any agent or commisions.
+          </p>
+
+        </div>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">Company</p>
+          </li>
+
+          <li>
+            <a href="./aboutUs.html" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">About us</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="./Login.html" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Login</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="./Register.html" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Sign Up</span>
+            </a>
+          </li>
+
+
+        </ul>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">Useful Links</p>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Terms of Services</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Privacy Policy</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="./Contact.html" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Contact</span>
+            </a>
+          </li>
+
+        </ul>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">Contact Details</p>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="location-outline"></ion-icon>
+
+            <address class="address">
+              Pranveer Singh Institute of Technology,<br>
+              Kanpur, Uttar Pradesh 209305,<br>
+              India
+              <a href="#" class="address-link">View on Google map</a>
+            </address>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="mail-outline"></ion-icon>
+
+            <a href="mailto:contact@example.com" class="footer-link">contact@example.com</a>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="call-outline"></ion-icon>
+
+            <a href="tel:+152534468854" class="footer-link">+152 534-468-854</a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+
+        <p class="copyright">
+          &copy; 2024 Estate Explorer. All Right Reserved by <a href="#" class="copyright-link">Estate Explorer Private
+            Limited</a>.
+        </p>
+
+        <ul class="social-list">
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-instagram"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-twitter"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+  </footer>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
