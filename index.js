@@ -95,6 +95,85 @@ app.post('/adduser', [
 
 
 // User login endpoint
+app.post('/login', async (req, res) => {
+
+  try {
+    const { email, password } = req.body;
+        // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ msg: 'Email and password are required' });
+    }
+
+    // Check if user exists
+    const user = await User.findOne({ mailid: email }); // Ensure consistent field name
+    if (!user) {
+      return res.status(400).json({ msg: 'User does not exist' });
+    }
+
+    // Verify password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid credentials' });
+    }
+
+    // Generate JWT
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.status(200).json({ msg: 'Login successful', token });
+
+  }catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
+// Update user endpoint
+app.put('/updateuser/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name: req.body.name,
+        email: req.body.email,
+        mobileno: req.body.mobileno,
+        password: await bcrypt.hash(req.body.password, 10)
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).send("User updated successfully");
+  } catch (error) {
+    res.status(500).send("Error updating user");
+  }
+});
+
+// Delete user endpoint
+app.delete('/deleteuser/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).send("User deleted successfully");
+  } catch (error) {
+    res.status(500).send("Error deleting user");
+  }
+});
+
+//Property Operations
+
+// Add property
 app.post('/properties', upload, async (req, res) => {
   try {
     // Log data for debugging
@@ -138,157 +217,6 @@ app.post('/properties', upload, async (req, res) => {
   }
 });
 
-
-
-// Update user endpoint
-app.put('/updateuser/:id', async (req, res) => {
-  const userId = req.params.id;
-
-  try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        name: req.body.name,
-        email: req.body.email,
-        mobileno: req.body.mobileno,
-        password: await bcrypt.hash(req.body.password, 10)
-      },
-      { new: true } // Return the updated document
-    );
-
-    if (!updatedUser) {
-      return res.status(404).send("User not found");
-    }
-
-    res.status(200).send("User updated successfully");
-  } catch (error) {
-    res.status(500).send("Error updating user");
-  }
-});
-
-// Delete user endpoint
-app.post('/properties', async (req, res) => {
-  try {
-    const token = req.headers.token;
-    if (!token) return res.status(401).json({ error: 'Token missing' });
-
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.body.newname = decoded.userId;
-
-    const propertyData = {
-      title: req.body.title,
-      type: req.body['property-type'], // Match HTML input name
-      location: req.body.location,
-      address: req.body.address,
-      price: req.body.price,
-      rating: 0,
-      area: req.body.area,
-      bedrooms: req.body.bedrooms,
-      baths: req.body.baths,
-      description: req.body.description,
-      features: req.body['features[]'] || [], // Handle array or empty
-      images: [],
-      userId: decoded.userId,
-    };
-
-    await new Promise((resolve, reject) =>
-      upload(req, res, (err) => {
-        if (err) return reject(err);
-        if (!req.files || req.files.length === 0) {
-          return reject(new Error('No files uploaded'));
-        }
-        propertyData.images = req.files.map((file) => file.filename);
-        resolve();
-      })
-    );
-
-    const property = new Property(propertyData);
-    await property.save();
-    res.status(201).json(property);
-  } catch (err) {
-    if (err.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Invalid token' });
-    } else if (err.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expired' });
-    } else if (err.message === 'No files uploaded') {
-      return res.status(400).json({ error: 'No files uploaded' });
-    }
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-//Property Operations
-
-// Add property
-app.post('/properties', async (req, res) => {
-  try {
-    // Extract the auth-token from req.body.userId
-    const token = req.headers.token;
-    // Verify and decode the token
-    const decoded = jwt.verify(token, JWT_SECRET); // This will extract the userId
-
-    // Add the newname to req.body
-    req.body.newname = decoded.userId;
-
-    // Create propertyData with user-specific data
-    const propertyData = {
-      title: req.body.title,
-      type: req.body.type,
-      location: req.body.location,
-      address: req.body.address,
-      price: req.body.price,
-      rating: 0, // Default rating
-      area: req.body.area,
-      bedrooms: req.body.bedrooms,
-      baths: req.body.baths,
-      description: req.body.description,
-      features: req.body.features.split(","),
-      images: [], // This will be populated after file upload
-      userId: decoded.userId // Extracted userId from the token
-    };
-    console.log(propertyData)
-    //Upload files
-    upload(req, res, async (err) => {
-      if (err) {
-        if (err.code === 'LIMIT_FILE_COUNT') {
-          return res.status(400).send('You can upload a maximum of 10 files.');
-        }
-        if (err.code === 'LIMIT_FILE_SIZE') {
-          return res.status(400).send('File size is too large (max 10MB per file).');
-        }
-        return res.status(400).send('Error uploading files.');
-      }
-
-      if (req.files && req.files.length > 0) {
-        // Update the propertyData with uploaded filenames
-        propertyData.images = req.files.map(file => file.filename);
-      } else {
-        return res.status(400).send('No files uploaded.');
-      }
-
-      // Save the property to the database
-      const property = new Property(propertyData);
-      await property.save();
-
-      res.status(201).send(property); // Respond with the saved property
-    });
-    const property = new Property(propertyData);
-      await property.save();
-
-      res.status(201).json(property); // Respond with the saved property
-    
-  } catch (err) {
-    // Handle errors appropriately
-    if (err.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Invalid token' });
-    } else if (err.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expired' });
-    } else {
-      return res.status(400).json(err);
-    }
-  }
-});
 
 // Read all properties
 app.get('/properties', async (req, res) => {
