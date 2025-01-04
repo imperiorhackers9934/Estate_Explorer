@@ -15,25 +15,30 @@ app.use(express.json()); // Middleware to parse JSON
 
 // JWT Secret Key
 const JWT_SECRET = 'T@ni&hq9936'; // Replace with your actual secret key
-
-
-// Setup for Multer
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Directory to save files
-  },
-  filename: (req, file, cb) => {
-    const newFilename = `custom_${req.body.newname}${path.extname(file.originalname)}`;
-    cb(null, newFilename); // Custom file name
-  }
-});
+//Routing for Images
+app.use('/uploads', express.static(path.join(__dirname, './uploads')));
 
 // Multer configuration to handle multiple files and limit to 10
 const upload = multer({
-  storage,
-  limits: { files: 10, fileSize: 10 * 1024 * 1024 }, // Limit 10 files and 10MB per file
-}).array('files'); // Use .array for multiple files
-
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'uploads/'),
+    filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
+  }),
+}).fields([
+  { name: 'images[]', maxCount: 5 },
+  { name: 'title' },
+  { name: 'type' },
+  { name: 'location' },
+  { name: 'address' },
+  { name: 'price' },
+  { name: 'rating' },
+  { name: 'area' },
+  { name: 'bedrooms' },
+  { name: 'baths' },
+  { name: 'description' },
+  { name: 'features' },
+  { name: 'userId' },
+]);
 
 // Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
@@ -90,35 +95,49 @@ app.post('/adduser', [
 
 
 // User login endpoint
-app.post('/login', async (req, res) => {
+app.post('/properties', upload, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // Log data for debugging
+    console.log('Body:', req.body);
+    console.log('Files:', req.files);
 
-    // Validate input
-    if (!email || !password) {
-      return res.status(400).json({ msg: 'Email and password are required' });
-    }
+    // Check for token
+    const token = req.headers.token;
+    if (!token) return res.status(401).json({ error: 'Token missing' });
 
-    // Check if user exists
-    const user = await User.findOne({ mailid: email }); // Ensure consistent field name
-    if (!user) {
-      return res.status(400).json({ msg: 'User does not exist' });
-    }
+    const decoded = jwt.verify(token, JWT_SECRET);
+    // Parse features and images
+    const features = req.body.features ? req.body.features : [];
+    const images = req.files['images[]']?.map(file => file.filename) || [];
 
-    // Verify password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
-    }
+    // Create the property object
+    const propertyData = {
+      title: req.body.title,
+      type: req.body.type,
+      location: req.body.location,
+      address: req.body.address,
+      price: parseInt(req.body.price),
+      area: parseInt(req.body.area),
+      bedrooms: parseInt(req.body.bedrooms, 10),
+      baths: parseInt(req.body.baths, 10),
+      description: req.body.description,
+      rating: 0, // Default rating
+      features,
+      images,
+      userId: decoded.userId,
+    };
 
-    // Generate JWT
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ msg: 'Login successful', token });
+    // Validate and save the property
+    const newProperty = new Property(propertyData);
+    await newProperty.save();
+
+    res.status(201).json({ message: 'Property added successfully!' });
   } catch (error) {
-    console.error('Login error:', error.message);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error(error);
+    res.status(400).json({ error: error.message });
   }
 });
+
 
 
 // Update user endpoint
@@ -148,19 +167,54 @@ app.put('/updateuser/:id', async (req, res) => {
 });
 
 // Delete user endpoint
-app.delete('/deleteuser/:id', async (req, res) => {
-  const userId = req.params.id;
-
+app.post('/properties', async (req, res) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(userId);
+    const token = req.headers.token;
+    if (!token) return res.status(401).json({ error: 'Token missing' });
 
-    if (!deletedUser) {
-      return res.status(404).send("User not found");
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.body.newname = decoded.userId;
+
+    const propertyData = {
+      title: req.body.title,
+      type: req.body['property-type'], // Match HTML input name
+      location: req.body.location,
+      address: req.body.address,
+      price: req.body.price,
+      rating: 0,
+      area: req.body.area,
+      bedrooms: req.body.bedrooms,
+      baths: req.body.baths,
+      description: req.body.description,
+      features: req.body['features[]'] || [], // Handle array or empty
+      images: [],
+      userId: decoded.userId,
+    };
+
+    await new Promise((resolve, reject) =>
+      upload(req, res, (err) => {
+        if (err) return reject(err);
+        if (!req.files || req.files.length === 0) {
+          return reject(new Error('No files uploaded'));
+        }
+        propertyData.images = req.files.map((file) => file.filename);
+        resolve();
+      })
+    );
+
+    const property = new Property(propertyData);
+    await property.save();
+    res.status(201).json(property);
+  } catch (err) {
+    if (err.name === 'JsonWebTokenError') {
+      return res.status(401).json({ error: 'Invalid token' });
+    } else if (err.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    } else if (err.message === 'No files uploaded') {
+      return res.status(400).json({ error: 'No files uploaded' });
     }
-
-    res.status(200).send("User deleted successfully");
-  } catch (error) {
-    res.status(500).send("Error deleting user");
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
@@ -170,8 +224,7 @@ app.delete('/deleteuser/:id', async (req, res) => {
 app.post('/properties', async (req, res) => {
   try {
     // Extract the auth-token from req.body.userId
-    const token = req.body.userId;
-
+    const token = req.headers.token;
     // Verify and decode the token
     const decoded = jwt.verify(token, JWT_SECRET); // This will extract the userId
 
@@ -195,7 +248,7 @@ app.post('/properties', async (req, res) => {
       userId: decoded.userId // Extracted userId from the token
     };
     console.log(propertyData)
-    // Upload files
+    //Upload files
     upload(req, res, async (err) => {
       if (err) {
         if (err.code === 'LIMIT_FILE_COUNT') {
@@ -220,15 +273,19 @@ app.post('/properties', async (req, res) => {
 
       res.status(201).send(property); // Respond with the saved property
     });
+    const property = new Property(propertyData);
+      await property.save();
+
+      res.status(201).json(property); // Respond with the saved property
     
   } catch (err) {
     // Handle errors appropriately
     if (err.name === 'JsonWebTokenError') {
-      return res.status(401).send({ error: 'Invalid token' });
+      return res.status(401).json({ error: 'Invalid token' });
     } else if (err.name === 'TokenExpiredError') {
-      return res.status(401).send({ error: 'Token expired' });
+      return res.status(401).json({ error: 'Token expired' });
     } else {
-      return res.status(400).send(err);
+      return res.status(400).json(err);
     }
   }
 });
@@ -256,7 +313,9 @@ app.get('/properties/:id', async (req, res) => {
 //Read Properties of a specific user
 app.get('/userproperties/:id', async (req, res) => {
   try {
-    const property = await Property.find({"userId":req.params.id});
+    // Verify and decode the token
+    const decoded = jwt.verify(req.params.id, JWT_SECRET);
+    const property = await Property.find({"userId":decoded.userId});
     if (!property) return res.status(404).send('Property not found');
     res.json(property);
   } catch (err) {
@@ -278,7 +337,9 @@ app.put('/properties/:id', async (req, res) => {
 // Delete property
 app.delete('/properties/:id', async (req, res) => {
   try {
-    const property = await Property.findByIdAndDelete(req.params.id);
+    // Verify and decode the token
+    const decoded = jwt.verify(req.headers.token, JWT_SECRET);
+    const property = await Property.findOneAndDelete({userId:decoded.userId, _id: req.params.id});
     if (!property) return res.status(404).send('Property not found');
     res.send(property);
   } catch (err) {

@@ -117,10 +117,13 @@ h1 {
 #logout{
     color: white;
     background-color: red;
-    border-radius: 20px;
+    border-radius: 10px;
     border: none;
+    font-weight: bold;
     padding: 10%;
 }
 #logout:hover{
     background-color: #d30808;
+    cursor: pointer;
+    font-weight: bolder;
 }

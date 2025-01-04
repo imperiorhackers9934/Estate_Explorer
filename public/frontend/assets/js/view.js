@@ -52,6 +52,14 @@ async function fetchPropertyData() {
       document.getElementById("baths").innerText=data.baths
       document.getElementById("cost").innerText=data.price
       document.getElementById("lets-mail").setAttribute("href",`mailto:${usrname.mailid}`)
+      const carouselImages = document.querySelector('.carousel-images');
+    data.images.forEach((img, index) => {
+      const imgElement = document.createElement('img');
+      imgElement.src = `/uploads/${img}`;
+      imgElement.alt = `Image ${index + 1}`;
+      imgElement.style.display = index === 0 ? 'block' : 'none'; // Show only the first image
+      carouselImages.appendChild(imgElement);
+    });
       usermob=usrname.mobile
       // You can now use the fetched data as needed
     } catch (error) {

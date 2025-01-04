@@ -108,7 +108,7 @@ $(document).ready(function() {
               <div class="property-card">
 
                 <figure class="card-banner img-holder" style="--width: 800; --height: 533;">
-                  <img src="./assets/images/property-1.jpg" width="800" height="533" loading="lazy"
+                  <img src=${property.images.length!=0 ?"/uploads/"+property.images[0] :"./assets/images/property-1.jpg"} width="800" height="533" loading="lazy"
                     alt="10765 Hillshire Ave, Baton Rouge, LA 70810, USA" class="img-cover">
                 </figure>
 

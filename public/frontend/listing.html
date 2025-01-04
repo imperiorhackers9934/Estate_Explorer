@@ -1,112 +1,48 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estate Explorer - Listings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/listing.css">
 </head>
 
 <body>
-    <script>
-        const user = localStorage.getItem('auth-token')
-        document.addEventListener('DOMContentLoaded', async function () {
-            const propertyList = document.getElementById('property-list');
-
-            // Fetch properties from the API
-            async function fetchProperties(id) {
-                try {
-                    const response = await fetch(`/userproperties/${id}`); // Replace with your actual API endpoint
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch properties');
-                    }
-                    const properties = await response.json();
-                    displayProperties(properties);
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred while fetching the properties.');
-                }
-            }
-
-            // Display properties
-            function displayProperties(properties) {
-                propertyList.innerHTML = ''; // Clear existing properties
-                properties.forEach(property => {
-                    const propertyItem = document.createElement('div');
-                    propertyItem.classList.add('property-item');
-
-                    propertyItem.innerHTML = `
-                <h2>${property.title}</h2>
-                <p>${property.description}</p>
-                <a href="property-detail.html?id=${property._id}" class="view-btn">View Details</a>
-                <button class="delete-btn" data-id="${property._id}">Delete</button>
-            `;
-
-                    // Add event listener for the delete button
-                    propertyItem.querySelector('.delete-btn').addEventListener('click', function () {
-                        deleteProperty(property._id);
-                    });
-
-                    propertyList.appendChild(propertyItem);
-                });
-            }
-
-            // Delete property
-            async function deleteProperty(id) {
-                try {
-                    const response = await fetch(`/properties/${id}`, {
-                        method: 'DELETE'
-                    });
-                    if (!response.ok) {
-                        throw new Error('Failed to delete property');
-                    }
-                    alert('Property deleted successfully');
-                    fetchProperties(user); // Refresh the list of properties
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred while deleting the property.');
-                }
-            }
-
-            // Fetch properties on page load
-            fetchProperties(user);
-        });
-
-    </script>
+    <script src="./assets/js/listing.js"></script>
     <nav class="navbar">
-        <!-- <div class="navbar-container">
-            <a href="dashboard.html" class="navbar-brand">Estate Explorer</a>
+        <div class="navbar-container">
+            <a href="./index.html" class="navbar-brand"><ion-icon name="business-outline"></ion-icon> Estate Explorer</a>
             <ul class="navbar-menu">
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="sell.html">Sell</a></li>
                 <li><a href="listings.html">Listings</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
-        </div> -->
+        </div>
     </nav>
     <div class="container">
         <header>
             <h1>Listings</h1>
         </header>
         <main>
-            <div class="property-list">
+            <div id="property-list" class="property-list">
                 <div class="property-item">
                     <h2>Property 1</h2>
                     <p>Description of Property 1</p>
-                    <a href="property-detail.html" class="view-btn">View Details</a>
-                    <button class="delete-btn">Delete</button>
+                    <a href="property-detail.html?id=1" class="view-btn">View Details</a>
+                    <button class="delete-btn" data-id="1">Delete</button>
                 </div>
-                <div class="property-item">
-                    <h2>Property 2</h2>
-                    <p>Description of Property 2</p>
-                    <a href="property-detail.html" class="view-btn">View Details</a>
-                    <button class="delete-btn">Delete</button>
-                </div>
-                <!-- Add more properties as needed -->
             </div>
         </main>
     </div>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>
