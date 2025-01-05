@@ -2,273 +2,281 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>About Us - Estate Explorer</title>
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <link rel="stylesheet" href="./assets/css/register_style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
-      rel="stylesheet">
-      <link rel="stylesheet" href="./assets/css/style2.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Register - Estate Explorer</title>
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <link rel="stylesheet" href="./assets/css/register_style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style2.css">
 </head>
 
 <body>
-    <script>
-      let gettoken=localStorage.getItem("auth-token");
-  if(gettoken){
-      window.location="dashboard.html"  
-  }
-    </script>
-    <!-- Header -->
-    <header class="header" data-header>
-        <div class="container">
-    
+  <script>
+    let gettoken = localStorage.getItem("auth-token");
+    if (gettoken) {
+      window.location = "dashboard.html"
+    }
+  </script>
+  <!-- Header -->
+  <header class="header" data-header>
+    <div class="container">
+
+      <a href="#" class="logo">
+        <ion-icon name="business-outline"></ion-icon> Estate Explorer
+      </a>
+
+      <nav class="navbar container" data-navbar>
+        <ul class="navbar-list">
+
+          <li>
+            <a href="./index.html" class="navbar-link" data-nav-link>Home</a>
+          </li>
+
+          <li>
+            <a href="./Buy.html" class="navbar-link" data-nav-link>Buy</a>
+          </li>
+
+          <li>
+            <a href="./sh.html" class="navbar-link" data-nav-link>Sell</a>
+          </li>
+
+          <li>
+            <a href="./aboutUs.html" class="navbar-link" data-nav-link>About Us</a>
+          </li>
+
+          <li>
+            <a href="./Contact.html" class="navbar-link" data-nav-link>Contact</a>
+          </li>
+
+        </ul>
+      </nav>
+
+
+      <button class="nav-toggle-btn" aria-label="Toggle menu" data-nav-toggler>
+        <ion-icon name="menu-outline" aria-hidden="true" class="menu-icon"></ion-icon>
+        <ion-icon name="close-outline" aria-hidden="true" class="close-icon"></ion-icon>
+      </button>
+
+    </div>
+
+  </header>
+  <!-- Main Search Section -->
+  <div class="re-container">
+    <div class="re-form-container">
+      <h2>Sign Up for Estate Explorer</h2>
+      <form id="user-form">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="input-group">
+          <label for="mob">Mobile</label>
+          <input type="number" id="mob" name="mob" placeholder="Enter your Mobile No." required>
+        </div>
+
+
+        <div class="input-group">
+          <label for="address">Address</label>
+          <input type="address" id="address" name="address" placeholder="Enter your address " required>
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <div class="input-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password"
+            required>
+        </div>
+
+        <!-- User Images -->
+        <div class="form-group">
+          <label for="images">Upload Profile Image</label>
+          <input type="file" id="image" name="image" accept="image/*" required>
+        </div><br>
+
+        <button type="submit" class="btn">Sign Up</button>
+
+        <div class="login-link">
+          <p>Already have an account? <a href="Login.html">Login here</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="container">
+
+        <div class="footer-brand">
+
           <a href="#" class="logo">
             <ion-icon name="business-outline"></ion-icon> Estate Explorer
           </a>
-    
-          <nav class="navbar container" data-navbar>
-            <ul class="navbar-list">
-    
-              <li>
-                <a href="./index.html" class="navbar-link" data-nav-link>Home</a>
-              </li>
-    
-              <li>
-                <a href="./Buy.html" class="navbar-link" data-nav-link>Buy</a>
-              </li>
-    
-              <li>
-                <a href="./sh.html" class="navbar-link" data-nav-link>Sell</a>
-              </li>
-    
-              <li>
-                <a href="./aboutUs.html" class="navbar-link" data-nav-link>About Us</a>
-              </li>
-    
-              <li>
-                <a href="./Contact.html" class="navbar-link" data-nav-link>Contact</a>
-              </li>
-    
-            </ul>
-          </nav>
-    
-    
-          <button class="nav-toggle-btn" aria-label="Toggle menu" data-nav-toggler>
-            <ion-icon name="menu-outline" aria-hidden="true" class="menu-icon"></ion-icon>
-            <ion-icon name="close-outline" aria-hidden="true" class="close-icon"></ion-icon>
-          </button>
-    
+
+          <p class="footer-text">
+            A great plateform to buy, sell and rent your properties without any agent or commisions.
+          </p>
+
         </div>
-        
-      </header>
-      <!-- Main Search Section -->
-      <div class="re-container">
-        <div class="re-form-container">
-            <h2>Sign Up for Estate Explorer</h2>
-            <form id="user-form">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
-                </div>
 
-                <div class="input-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                </div>
+        <ul class="footer-list">
 
-                <div class="input-group">
-                    <label for="mob">Mobile</label>
-                    <input type="number" id="mob" name="mob" placeholder="Enter your Mobile No." required>
-                </div>
+          <li>
+            <p class="footer-list-title">Company</p>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">About us</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Login</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Sign Up</span>
+            </a>
+          </li>
 
 
-                <div class="input-group">
-                    <label for="address">Address</label>
-                    <input type="address" id="address" name="address" placeholder="Enter your address " required>
-                </div>
+        </ul>
 
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
+        <ul class="footer-list">
 
-                <div class="input-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
-                </div>
+          <li>
+            <p class="footer-list-title">Useful Links</p>
+          </li>
 
-                <button type="submit" class="btn">Sign Up</button>
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
 
-                <div class="login-link">
-                    <p>Already have an account? <a href="Login.html">Login here</a></p>
-                </div>
-            </form>
-        </div>
+              <span class="span">Terms of Services</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Privacy Policy</span>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="footer-link">
+              <ion-icon name="chevron-forward"></ion-icon>
+
+              <span class="span">Contact</span>
+            </a>
+          </li>
+
+        </ul>
+
+        <ul class="footer-list">
+
+          <li>
+            <p class="footer-list-title">Contact Details</p>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="location-outline"></ion-icon>
+
+            <address class="address">
+              Pranveer Singh Institute of Technology,<br>
+              Kanpur, Uttar Pradesh 209305,<br>
+              India
+              <a href="#" class="address-link">View on Google map</a>
+            </address>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="mail-outline"></ion-icon>
+
+            <a href="mailto:contact@example.com" class="footer-link">contact@example.com</a>
+          </li>
+
+          <li class="footer-item">
+            <ion-icon name="call-outline"></ion-icon>
+
+            <a href="tel:+152534468854" class="footer-link">+152 534-468-854</a>
+          </li>
+
+        </ul>
+
+      </div>
     </div>
-      
-    <!-- Footer -->
-    <footer class="footer">
 
-        <div class="footer-top">
-          <div class="container">
-    
-            <div class="footer-brand">
-    
-              <a href="#" class="logo">
-                <ion-icon name="business-outline"></ion-icon> Estate Explorer
-              </a>
-    
-              <p class="footer-text">
-                A great plateform to buy, sell and rent your properties without any agent or commisions.
-              </p>
-    
-            </div>
-    
-            <ul class="footer-list">
-    
-              <li>
-                <p class="footer-list-title">Company</p>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">About us</span>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">Login</span>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">Sign Up</span>
-                </a>
-              </li>
-    
-    
-            </ul>
-    
-            <ul class="footer-list">
-    
-              <li>
-                <p class="footer-list-title">Useful Links</p>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">Terms of Services</span>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">Privacy Policy</span>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="footer-link">
-                  <ion-icon name="chevron-forward"></ion-icon>
-    
-                  <span class="span">Contact</span>
-                </a>
-              </li>
-    
-            </ul>
-    
-            <ul class="footer-list">
-    
-              <li>
-                <p class="footer-list-title">Contact Details</p>
-              </li>
-    
-              <li class="footer-item">
-                <ion-icon name="location-outline"></ion-icon>
-    
-                <address class="address">
-                   Pranveer Singh Institute of Technology,<br>
-                   Kanpur, Uttar Pradesh 209305,<br>
-                   India
-                  <a href="#" class="address-link">View on Google map</a>
-                </address>
-              </li>
-    
-              <li class="footer-item">
-                <ion-icon name="mail-outline"></ion-icon>
-    
-                <a href="mailto:contact@example.com" class="footer-link">contact@example.com</a>
-              </li>
-    
-              <li class="footer-item">
-                <ion-icon name="call-outline"></ion-icon>
-    
-                <a href="tel:+152534468854" class="footer-link">+152 534-468-854</a>
-              </li>
-    
-            </ul>
-    
-          </div>
-        </div>
-    
-        <div class="footer-bottom">
-          <div class="container">
-    
-            <p class="copyright">
-              &copy; 2024 Estate Explorer. All Right Reserved by <a href="#" class="copyright-link">Estate Explorer Private Limited</a>.
-            </p>
-    
-            <ul class="social-list">
-    
-              <li>
-                <a href="#" class="social-link">
-                  <ion-icon name="logo-facebook"></ion-icon>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="social-link">
-                  <ion-icon name="logo-instagram"></ion-icon>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="social-link">
-                  <ion-icon name="logo-twitter"></ion-icon>
-                </a>
-              </li>
-    
-              <li>
-                <a href="#" class="social-link">
-                  <ion-icon name="logo-linkedin"></ion-icon>
-                </a>
-              </li>
-    
-            </ul>
-    
-          </div>
-        </div>
-    
-      </footer>
-      <script src="./assets/js/regis.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <div class="footer-bottom">
+      <div class="container">
+
+        <p class="copyright">
+          &copy; 2024 Estate Explorer. All Right Reserved by <a href="#" class="copyright-link">Estate Explorer Private
+            Limited</a>.
+        </p>
+
+        <ul class="social-list">
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-instagram"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-twitter"></ion-icon>
+            </a>
+          </li>
+
+          <li>
+            <a href="#" class="social-link">
+              <ion-icon name="logo-linkedin"></ion-icon>
+            </a>
+          </li>
+
+        </ul>
+
+      </div>
+    </div>
+
+  </footer>
+  <script src="./assets/js/regis.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>

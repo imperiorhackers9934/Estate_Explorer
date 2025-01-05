@@ -8,6 +8,7 @@ const userSchema = new Schema({
   },
   mailid: {
     type: String,
+    unique: true,
     required: true,
   },
   address: {
@@ -17,6 +18,10 @@ const userSchema = new Schema({
   mobileno: {
     type: Number,
     required: true,
+  },
+  image:{
+    type:String,
+    required:true
   },
   password: {
     type: String,

@@ -1,0 +1,142 @@
+body {
+    font-family: "League Spartan", sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #0ab900;
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar-brand {
+    color: white;
+    font-size: 1.5em;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.navbar-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-menu li {
+    list-style: none;
+}
+
+.navbar-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.navbar-menu a:hover {
+    text-decoration: underline;
+}
+
+#logout{
+    color: white;
+    background-color: red;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    padding: 10%;
+}
+#logout:hover{
+    background-color: #d30808;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+
+.container {
+    /* max-width: 700px; */
+    margin: 50px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #333;
+}
+
+.profile-pic {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-pic input[type="file"] {
+    display: none;
+}
+
+.profile-pic label {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-group button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.form-group button:hover {
+    background-color: #218838;
+}

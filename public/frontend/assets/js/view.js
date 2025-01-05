@@ -46,12 +46,14 @@ async function fetchPropertyData() {
       const usrname = await myres.json();
       console.log(usrname)
       document.getElementById("usr").innerText=usrname.name
-      document.getElementById("prop-title").innerText=data.address
+      document.getElementById("prop-title").innerText=data.title+" at "+data.address
       document.getElementById("area").innerText=data.area
       document.getElementById("bedroom").innerText=data.bedrooms
       document.getElementById("baths").innerText=data.baths
       document.getElementById("cost").innerText=data.price
       document.getElementById("lets-mail").setAttribute("href",`mailto:${usrname.mailid}`)
+      document.getElementById("buy-prop").setAttribute("href",`tel:+91${usrname.mobile}`)
+      document.getElementById("propmap").setAttribute("src",`https://maps.google.com/maps?q=${data.address.split(" ").join("+")}&output=embed`)
       const carouselImages = document.querySelector('.carousel-images');
     data.images.forEach((img, index) => {
       const imgElement = document.createElement('img');
@@ -69,6 +71,3 @@ async function fetchPropertyData() {
   
   // Call the function to fetch data
   fetchPropertyData();
-  document.getElementById("buy-prop").addEventListener("click",()=>{
-    window.location.href=`tel:${usermob}`
-  })

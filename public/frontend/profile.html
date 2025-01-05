@@ -1,0 +1,147 @@
+<html>
+ <head>
+  <title>
+   MyProfile - Estate Explorer
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="./assets/css/profile.css"/>
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: #333;
+        }
+        .profile-pic {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .profile-pic img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-pic input[type="file"] {
+            display: none;
+        }
+        .profile-pic label {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .form-group button:hover {
+            background-color: #218838;
+        }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+ </head>
+ <body>
+    <script src="./assets/js/profile.js"></script>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand"><ion-icon name="business-outline"></ion-icon> Estate Explorer</a>
+            <ul class="navbar-menu">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="Sell.html">Sell</a></li>
+                <li><a href="listing.html">Listings</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><button id="logout">LogOut</button></li>
+            </ul>
+        </div>
+    </nav>
+  <div class="container">
+   <div class="header">
+    <h1>
+     My Profile
+    </h1>
+   </div>
+   <div class="profile-pic">
+    <img alt="Profile picture of the user" height="150" src="https://storage.googleapis.com/a1aa/image/zUBTQ9DVLkoYGlV81y0uS23OSHVVn3gekzOObzdCRjiagABKA.jpg" width="150"/>
+    <input accept="image/*" id="file" type="file"/>
+    <label for="file">
+     <i class="fas fa-upload">
+     </i>
+     Change Avatar
+    </label>
+   </div>
+   <form>
+    <div class="form-group">
+     <label for="name">
+      Name
+     </label>
+     <input id="name" name="name" placeholder="Enter your name" type="text"/>
+    </div>
+    <div class="form-group">
+     <label for="email">
+      Email
+     </label>
+     <input id="email" name="email" placeholder="Enter your email" type="email"/>
+    </div>
+    <div class="form-group">
+     <label for="password">
+      Password
+     </label>
+     <input id="password" name="password" placeholder="Enter your password" type="password"/>
+    </div>
+    <div class="form-group">
+     <button type="submit">
+      Save Changes
+     </button>
+    </div>
+   </form>
+  </div>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+ </body>
+</html>
