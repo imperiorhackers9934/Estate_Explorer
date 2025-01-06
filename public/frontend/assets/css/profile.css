@@ -140,3 +140,9 @@ body {
 .form-group button:hover {
     background-color: #218838;
 }
+#delete button {
+    background-color: red;
+}
+#delete button:hover {
+    background-color: rgb(194, 6, 6);
+}

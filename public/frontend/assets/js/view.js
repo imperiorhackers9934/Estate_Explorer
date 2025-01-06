@@ -53,6 +53,7 @@ async function fetchPropertyData() {
       document.getElementById("cost").innerText=data.price
       document.getElementById("lets-mail").setAttribute("href",`mailto:${usrname.mailid}`)
       document.getElementById("buy-prop").setAttribute("href",`tel:+91${usrname.mobile}`)
+      document.getElementById("userimage").setAttribute("src",`./profile/${usrname.image}`)
       document.getElementById("propmap").setAttribute("src",`https://maps.google.com/maps?q=${data.address.split(" ").join("+")}&output=embed`)
       const carouselImages = document.querySelector('.carousel-images');
     data.images.forEach((img, index) => {

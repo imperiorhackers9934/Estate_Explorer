@@ -11,6 +11,7 @@ const path = require('path');
 const staticpath = path.join(__dirname, "./public/frontend/");
 app.use(express.static(staticpath));
 const Property = require("./Backend/Schemas/Proschema");
+const { decode } = require('punycode');
 app.use(express.json()); // Middleware to parse JSON
 
 // JWT Secret Key
@@ -74,20 +75,37 @@ mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('Could not connect to MongoDB:', error));
 
-// Home route
+// Get User Info
 app.get('/getname/:id', async (req, res) => {
   try {
     const usr = await User.findById(req.params.id);
     if (!usr) return res.status(404).send('User invalid');
     res.json({"name":usr.name,
       "mobile":usr.mobileno,
-      "mailid":usr.mailid
+      "mailid":usr.mailid,
+      "image":usr.image
     });
   } catch (err) {
     res.status(500).send(err);
   }
 });
 
+app.get('/getuser/:id', async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.params.id, JWT_SECRET);
+    const usr = await User.findById(decoded.userId);
+    if (!usr) return res.status(404).json({msg:'User invalid'});
+    res.json({"name":usr.name,
+      "mobile":usr.mobileno,
+      "mailid":usr.mailid,
+      "image":usr.image
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+//Add User
 app.post('/adduser', userupload, validationMiddleware, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -166,45 +184,64 @@ app.post('/login', async (req, res) => {
 
 
 // Update user endpoint
-app.put('/updateuser/:id', async (req, res) => {
-  const userId = req.params.id;
-
+app.put('/updateuser/:id', userupload, async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        name: req.body.name,
-        email: req.body.email,
-        mobileno: req.body.mobileno,
-        password: await bcrypt.hash(req.body.password, 10)
-      },
-      { new: true } // Return the updated document
-    );
+    // Verify the JWT and extract the userId
+    const decoded = jwt.verify(req.params.id, JWT_SECRET);
+    const userId = decoded.userId;
 
-    if (!updatedUser) {
+    // Find the existing user
+    const existingUser = await User.findById(userId);
+    if (!existingUser) {
       return res.status(404).send("User not found");
     }
 
-    res.status(200).send("User updated successfully");
+    // Prepare updated data, retaining old values if new ones aren't provided
+    const updatedData = {
+      name: req.body.name || existingUser.name,
+      email: req.body.email || existingUser.mailid,
+      mobileno: req.body.mobileno || existingUser.mobileno,
+      address: req.body.address || existingUser.address,
+      image: req.file ? req.file.filename : existingUser.image,
+    };
+
+    // Hash password if provided
+    if (req.body.password) {
+      updatedData.password = await bcrypt.hash(req.body.password, 10);
+    } else {
+      updatedData.password = existingUser.password; // Retain old password
+    }
+
+    // Update user in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updatedData },
+      { new: true } // Return the updated document
+    );
+
+    res.status(200).json({ msg: "User updated successfully", user: updatedUser });
   } catch (error) {
+    console.error("Error updating user:", error.message);
     res.status(500).send("Error updating user");
   }
 });
 
+
 // Delete user endpoint
 app.delete('/deleteuser/:id', async (req, res) => {
-  const userId = req.params.id;
+  const decoded = jwt.verify(req.params.id, JWT_SECRET);
 
   try {
-    const deletedUser = await User.findByIdAndDelete(userId);
+    const deletedUser = await User.findByIdAndDelete(decoded.userId);
+    const deletedProperties = await Property.deleteMany({ userId: decoded.userId });
 
-    if (!deletedUser) {
-      return res.status(404).send("User not found");
+    if (!(deletedUser && deletedProperties)) {
+      return res.status(404).json({msg:"User not found"});
     }
 
-    res.status(200).send("User deleted successfully");
+    res.status(200).json({msg:"User deleted successfully"});
   } catch (error) {
-    res.status(500).send("Error deleting user");
+    res.status(500).json({msg:"Error deleting user"});
   }
 });
 
