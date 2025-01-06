@@ -68,7 +68,7 @@ const validationMiddleware = [
 ];
 
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/estate_explorer', {
+mongoose.connect('mongodb+srv://vercel-admin-user:zRXicJtXRQBgPjho@cluster0.bfdghhe.mongodb.net/estate_explorer', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
