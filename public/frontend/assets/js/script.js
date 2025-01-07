@@ -78,22 +78,11 @@ const changeTab = function () {
   this.classList.add("active");
   lastClickedTabBtn = this;
 }
-  // <div>
-  //         // <h2>${property.address}</h2>
-  //         // <p>Price: ₹${property.price}</p>
-  //         // <p>Rating: ${property.rating} stars</p>
-  //         // <p>Area: ${property.area} sqft</p>
-  //         // <p>Bedrooms: ${property.bedrooms}</p>
-  //         // <p>Baths: ${property.baths}</p>
-  //         <p>Added by user ID: ${property.userId}</p>
-  //         <p>Date Added: ${new Date(property.dateAdded).toLocaleDateString()}</p>
-  //       </div>
-  //       <hr></hr>
 addEventOnElement(tabBtns, "click", changeTab);
 
 $(document).ready(function() {
   // Define the URL to fetch properties from
-  const apiUrl = `http://${window.location.hostname}/properties`;
+  const apiUrl = `https://${window.location.hostname}/properties`;
 
   // Fetch properties from the server
   $.get(apiUrl, function(data) {
