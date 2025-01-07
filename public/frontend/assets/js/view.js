@@ -11,7 +11,7 @@ async function fetchPropertyData() {
       }
   
       // Define the API endpoint
-      const apiUrl = `http://localhost:3000/properties/${userId}`;
+      const apiUrl = `http://${window.location.hostname}/${userId}`;
       
       // Make a POST request to fetch property data
       const response = await fetch(apiUrl, {
