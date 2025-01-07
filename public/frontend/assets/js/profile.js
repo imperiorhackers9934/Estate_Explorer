@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   const user = localStorage.getItem('auth-token');
-  const usrUrl = `http://localhost:3000/getuser/${user}`;
+  const usrUrl = `/getuser/${user}`;
 
   // Make a GET request to fetch user data
   async function fetchUserData() {
