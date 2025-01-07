@@ -93,7 +93,7 @@ addEventOnElement(tabBtns, "click", changeTab);
 
 $(document).ready(function() {
   // Define the URL to fetch properties from
-  const apiUrl = 'http://localhost:3000/properties';
+  const apiUrl = `http://${window.location.hostname}/properties`;
 
   // Fetch properties from the server
   $.get(apiUrl, function(data) {
