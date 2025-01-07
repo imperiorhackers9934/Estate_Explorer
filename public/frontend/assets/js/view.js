@@ -11,7 +11,7 @@ async function fetchPropertyData() {
       }
   
       // Define the API endpoint
-      const apiUrl = `http://${window.location.hostname}/${userId}`;
+      const apiUrl = `https://${window.location.hostname}/${userId}`;
       
       // Make a POST request to fetch property data
       const response = await fetch(apiUrl, {
@@ -28,7 +28,7 @@ async function fetchPropertyData() {
         
         const data = await response.json();
         console.log('Property data:', data);
-        const usrUrl = `http://localhost:3000/getname/${data.userId}`;
+        const usrUrl = `https://${window.location.hostname}/getname/${data.userId}`;
         document.title=data.address
         // Make a POST request to fetch property data
       const myres = await fetch(usrUrl, {
