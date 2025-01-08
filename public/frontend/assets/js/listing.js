@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             propertyItem.classList.add('property-item');
 
             propertyItem.innerHTML = `
-                        <h2>${property.address}</h2>
+                        <h2>${property.title+" at "+property.address}</h2>
                         <p>${parseDate(property.dateAdded)}</p>
                         <a href="view.html?propid=${property._id}" class="view-btn">View Details</a>
                         <button class="delete-btn" data-id="${property._id}">Delete</button>
