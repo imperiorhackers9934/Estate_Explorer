@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error:', error);
             alert('An error occurred while fetching the properties.');
             localStorage.removeItem('auth-token');
-            window.location.href = '/login.html';
+            window.location.href = '/Login.html';
         }
     }
 
